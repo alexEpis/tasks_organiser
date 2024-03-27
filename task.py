@@ -1,6 +1,6 @@
 # task.py
 
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 
 
 class Task(object):
@@ -15,7 +15,8 @@ class Task(object):
 
         if task_type == 'periodic':
             assert isinstance(occurrences, int), f"Occurrences must be an integer ({type(occurrences)} was given)."
-            self.occurrences = occurrences
+            self.occurrences = occurrences  # Total occurrences
+            self.completed_occurrences = 0  # Initialize completed occurrences
 
             if isinstance(frequency, str):
                 assert frequency in ['daily', 'monthly', 'yearly'], f"Invalid frequency: {frequency}"
@@ -31,6 +32,7 @@ class Task(object):
                 raise ValueError("Frequency must be a string or integer.")
         elif task_type == 'once':
             self.occurrences = None
+            self.completed_occurrences = None
             self.frequency = None
         else:
             raise ValueError(f"Task type must be 'once' or 'periodic' ('{task_type}' was given).")
@@ -42,14 +44,14 @@ class Task(object):
         return f"Task('{self.title}', '{self.due_date}', '{self.task_type}', '{self.frequency}', {self.completed})"
 
     def mark_completed(self):
+        # Mark the task as completed
         self.completed = True
-        self.completion_date = datetime.now().date()
-        if self.task_type == 'periodic' and self.occurrences:
-            self.occurrences -= 1  # Decrement occurrences
-            if self.occurrences > 0:
+        self.completion_date = date.today()
+        if self.task_type == 'periodic':
+            self.completed_occurrences += 1
+            # Calculate the next due date if there are more occurrences left
+            if self.completed_occurrences < self.occurrences:
                 self.calculate_next_due()
-            else:
-                self.task_type = 'once'  # Effectively stops the task from recurring
 
     def calculate_next_due(self):
         if self.task_type == 'periodic':
