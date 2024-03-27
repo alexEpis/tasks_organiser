@@ -51,7 +51,10 @@ class TaskManager:
         if 'frequency' in updates:
             task.frequency = updates['frequency']
         if 'occurrences' in updates:
-            task.occurrences = updates['occurrences']
+            new_total_occurrences = updates['occurrences']
+            assert new_total_occurrences >= task.completed_occurrences, \
+                "New occurrences must not be less than the number of already completed occurrences."
+            task.occurrences = new_total_occurrences
         storage.save_task(task)  # Save the updated task
 
     def get_tasks_for_today(self):
