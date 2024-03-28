@@ -92,12 +92,32 @@ def main_loop(_task_manager):
         elif choice == "6":
             ui.clear_screen()
             original_title = input("Enter the original title of the task to edit: ")
-            # Example edit process for the title; extend as needed for other attributes
-            new_title = input("Enter new title (leave blank to keep unchanged): ").strip()
+            task_to_edit = _task_manager.get_task(original_title)
+            if task_to_edit is None:
+                print(f"Task '{original_title}' not found.")
+                sleep(2)
+                continue  # Skip the rest of the loop and show the main menu again
+
             updates = {}
+
+            new_title = input("Enter new title (leave blank to keep unchanged): ").strip()
             if new_title:
                 updates['title'] = new_title
-            # Add prompts and updates handling for other task attributes as needed
+
+            # Extension for other attributes
+            new_due_date = input("Enter new due date (DD MM YYYY) (leave blank to keep unchanged): ").strip()
+            if new_due_date:
+                updates['due_date'] = datetime.strptime(new_due_date, "%d %m %Y").date()
+
+            if task_to_edit.task_type == "periodic":
+                new_frequency = input("Enter new frequency (in days, leave blank for no change): ").strip()
+                if new_frequency:
+                    updates['frequency'] = int(new_frequency)
+
+                new_occurrences = input("Enter new number of occurrences (leave blank for no change): ").strip()
+                if new_occurrences:
+                    updates['occurrences'] = int(new_occurrences)
+
             _task_manager.edit_task(original_title, **updates)
             print(f"Task '{original_title}' updated.")
             sleep(2)
