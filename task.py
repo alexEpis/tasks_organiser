@@ -41,7 +41,11 @@ class Task(object):
         return f"{self.title} - Due: {self.due_date} - Completed: {self.completed}"
 
     def __repr__(self):
-        return f"Task('{self.title}', '{self.due_date}', '{self.task_type}', '{self.frequency}', {self.completed})"
+        output = f"Task("
+        for key, value in self.__dict__.items():
+            output += f"{key}={value}, "
+        output = output[:-2] + ")"
+        return output
 
     def mark_completed(self):
         # Mark the task as completed
@@ -60,3 +64,10 @@ class Task(object):
             self.completed = False
         else:
             raise ValueError("Only periodic tasks can calculate next due date.")
+
+
+if __name__ == "__main__":
+    # Create a task
+    task = Task("Do the laundry", date.today(), 'periodic', frequency=7, occurrences=5)
+    print(task)
+    print(repr(task))
