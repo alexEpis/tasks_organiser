@@ -66,6 +66,12 @@ def main_loop(_task_manager):
         elif choice == "3":
             ui.clear_screen()
             tasks = _task_manager.get_tasks_for_today()  # Use a different method if you want to select from all tasks
+
+            if len(tasks) == 0:
+                print("There are no tasks to be marked as completed. Returning to the main menu...")
+                sleep(4)
+                continue  # Skip the rest of the loop and show the main menu again
+
             print("Select a task to mark as completed:")
             ui.list_tasks(tasks)
             selection = int(input("Enter the number of the task: ")) - 1
@@ -91,7 +97,7 @@ def main_loop(_task_manager):
 
         elif choice == "6":
             ui.clear_screen()
-            original_title = input("Enter the original title of the task to edit: ")
+            original_title = input("Enter the original title of the task to edit: ").strip()
             task_to_edit = _task_manager.get_task(original_title)
             if task_to_edit is None:
                 print(f"Task '{original_title}' not found.")
