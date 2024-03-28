@@ -97,7 +97,7 @@ def main_loop(_task_manager):
 
         elif choice == "6":
             ui.clear_screen()
-            original_title = input("Enter the original title of the task to edit: ")
+            original_title = input("Enter the original title of the task to edit: ").strip()
             task_to_edit = _task_manager.get_task(original_title)
             if task_to_edit is None:
                 print(f"Task '{original_title}' not found.")

@@ -1,6 +1,7 @@
 # task_manager.py
 
 from datetime import date
+from time import sleep
 import storage
 from task import Task
 
@@ -13,6 +14,11 @@ class TaskManager:
         task = Task(title, due_date, task_type, frequency, occurrences)
         storage.save_task(task)
         self.tasks[title] = task
+
+    def get_task(self, title):
+        if title in self.tasks:
+            return self.tasks[title]
+        return None
 
     def complete_task(self, title):
         task = self.tasks.get(title)
@@ -36,6 +42,11 @@ class TaskManager:
 
         if not task:
             raise ValueError(f"Task '{original_title}' not found.")
+
+        if len(updates) == 0:
+            print("No updates provided.")
+            sleep(2)
+            return
 
         if 'title' in updates:
             # Handle changing the title separately since it's the key in self.tasks
