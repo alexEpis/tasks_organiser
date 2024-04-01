@@ -24,10 +24,6 @@ class TaskManager:
         task = self.tasks.get(title)
         if task:
             task.mark_completed()
-
-            if task.task_type == 'periodic':
-                task.calculate_next_due()
-
             storage.save_task(task)
         else:
             print(f"Task '{title}' not found.")
