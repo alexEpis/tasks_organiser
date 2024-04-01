@@ -16,24 +16,46 @@ class TestTask(unittest.TestCase):
         self.assertEqual(task.due_date, due_date)
         self.assertEqual(task.task_type, "once")
 
+    def test_non_periodic_task(self):
+        due_date = date.today()
+        task = Task("Task Once", due_date, "once")
+        self.assertFalse(task.completed)
+        task.mark_completed()
+        self.assertTrue(task.completed)
+        self.assertEqual(task.completion_date, date.today())
+
     def test_periodic_task_next_due_daily(self):
         due_date = date.today()
         task = Task("Daily Task", due_date, "periodic", "daily", 4)
-        task.calculate_next_due()
+        self.assertFalse(task.completed)
+        task.mark_completed()
         self.assertEqual(task.due_date, due_date + timedelta(days=1))
+        self.assertFalse(task.completed)
+
+    def test_periodic_task_completed(self):
+        due_date = date.today()
+        task = Task("Daily Task", due_date, "periodic", "daily", 1)
+        self.assertFalse(task.completed)
+        task.mark_completed()
+        self.assertEqual(task.completion_date, date.today())
+        self.assertTrue(task.completed)
 
     def test_periodic_task_next_due_custom_frequency(self):
         due_date = date.today()
         task = Task("Custom Frequency Task", due_date, "periodic", 5, 3)
-        task.calculate_next_due()
+        self.assertFalse(task.completed)
+        task.mark_completed()
         self.assertEqual(task.due_date, due_date + timedelta(days=5))
+        self.assertFalse(task.completed)
 
     def test_periodic_task_next_due_custom_frequency_daily(self):
         # due_date = datetime.now().date()
         due_date = date.today()
         task = Task("Custom Frequency Task", due_date, "periodic", 'daily', 3)
-        task.calculate_next_due()
+        self.assertFalse(task.completed)
+        task.mark_completed()
         self.assertEqual(task.due_date, due_date + timedelta(days=1))
+        self.assertFalse(task.completed)
 
 
 class TestTaskManager(unittest.TestCase):

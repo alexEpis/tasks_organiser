@@ -31,6 +31,8 @@ class Task(object):
             else:
                 raise ValueError("Frequency must be a string or integer.")
         elif task_type == 'once':
+            assert frequency is None and occurrences is None, \
+                f"Frequency (given {frequency}) and occurrences (given {occurrences}) must be None for 'once' tasks."
             self.occurrences = None
             self.completed_occurrences = None
             self.frequency = None
@@ -55,15 +57,10 @@ class Task(object):
             self.completed_occurrences += 1
             # Calculate the next due date if there are more occurrences left
             if self.completed_occurrences < self.occurrences:
-                self.calculate_next_due()
-
-    def calculate_next_due(self):
-        if self.task_type == 'periodic':
-            assert isinstance(self.frequency, int), f"Frequency must be an integer ({type(self.frequency)} was given)."
-            self.due_date += timedelta(days=self.frequency)
-            self.completed = False
-        else:
-            raise ValueError("Only periodic tasks can calculate next due date.")
+                assert isinstance(self.frequency, int), \
+                    f"Frequency must be an integer ({type(self.frequency)} was given)."
+                self.due_date += timedelta(days=self.frequency)
+                self.completed = False
 
 
 if __name__ == "__main__":
