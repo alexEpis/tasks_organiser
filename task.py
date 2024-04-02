@@ -59,7 +59,7 @@ class Task(object):
             if self.completed_occurrences < self.occurrences:
                 assert isinstance(self.frequency, int), \
                     f"Frequency must be an integer ({type(self.frequency)} was given)."
-                self.due_date += timedelta(days=self.frequency)
+                self.due_date = date.today() + timedelta(days=self.frequency)
                 self.completed = False
 
 
