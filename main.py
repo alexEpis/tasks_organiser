@@ -31,6 +31,7 @@ def main_loop(_task_manager):
         print("4. Exit")
         print("5. Delete a task")
         print("6. Edit a task")
+        print("7. Show all tasks")
 
         choice = input("Choose an option: ")
 
@@ -127,6 +128,16 @@ def main_loop(_task_manager):
             _task_manager.edit_task(original_title, **updates)
             print(f"Task '{original_title}' updated.")
             sleep(2)
+
+        elif choice == "7":
+            ui.clear_screen()
+            tasks = _task_manager.tasks
+            print("All Tasks:\n")
+            for key in tasks:
+                print(f"{tasks[key].title}:")  # Equivalent to print(f"{key}:")
+                print(f"\t{repr(tasks[key])}")
+
+            input("\nPress Enter to return to the main menu...")
 
         else:
             print("Invalid choice, please try again.")
